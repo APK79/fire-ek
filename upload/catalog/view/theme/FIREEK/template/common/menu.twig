@@ -1,0 +1,77 @@
+{% if categories %}
+<nav id="menu" class="navbar">
+  <div class="container">
+  <div class="row">
+    <!-- Mobile Menu-->
+    <!--<div id="mob-menu" class="navbar-header">
+      <span id="category" class="visible-xs">{{ text_category }}</span>
+      <button type="button" class="btn btn-navbar js-toggle-mobMenu"><i class="fa fa-bars"></i></button>
+    </div>-->
+    <div class="navbar-collapse">
+    <div class="row">
+      <ul class="nav navbar-nav js-mobMenu-box">
+      <div class="popup-header visible-xs">
+        <h4>{{ text_category }}</h4>
+        <span class="btn popup-close js-close-mob-acc"><svg class="close-button"><use xlink:href="#close-button"></use></svg></span>
+      </div>
+      <!-- CATALOG MENU -->
+        <li class="catalog js-btn-catalog-toggle hidden-xs"><span><span class="ti-menu"> </span>{{ text_catalog }}</span></li>
+        <li class="catalog-mob visible-xs"><span>{{ text_catalog }}</span><span class="ti-angle-right angle_rotated"></span></li>
+        <div class="catalog__box container">
+         <div class="catalog__box-inner">
+          <ul id="menu__vertical" class="list-unstyled catalog__dropdown-menu col-sm-4">
+           <div class="catalog__dropdown-inner-list row">
+            {% for category in categories %}
+            {% if category.children %}
+            <li class="catalog__item item-child-list"><a href="{{ category.href }}">{{ category.name }}<span class="ti-angle-right js-dropdown"></span></a>
+            <div class="dropdown-child-menu js-dropdown-menu custom-scrollbar hidden">
+              <div class="catalog__dropdown-inner-list">
+              {% for children in category %}
+                <ul class="list-unstyled">
+                {% for child in children %}
+                <!--   lvl3 -->
+                {% if child.sub_children %}
+                <li class="catalog__item item-subchild-list"><a href="{{ child.href }}">{{ child.name }}<span class="ti-angle-right js-child-dropdown"></span></a>
+                <div class="dropdown-subchild-menu js-dropdown-menu custom-scrollbar hidden">
+                  <div class="dropdown-in">
+                  {% for sub_children in child %}
+                    <ul class="list-unstyled">
+                    {% for sub_child in sub_children %}
+                      <li><a href="{{ sub_child.href }}">{{ sub_child.name }}</a></li>
+                    {% endfor %}
+                    </ul>
+                  {% endfor %}</div>
+                  <!--<a href="{{ child.href }}" class="see-all">{{ text_all }} {{ child.name }}</a> -->
+                 </div>
+                 </li>
+                 {% else %}
+                   <li class="catalog__item"><a href="{{ child.href }}">{{ child.name }}</a></li>
+                {% endif %}
+                <!-- end lvl3 -->
+                {% endfor %}</ul>
+              {% endfor %}</div>
+              <!--<a href="{{ category.href }}" class="see-all">{{ text_all }} {{ category.name }}</a>-->
+             </div>
+             </li>
+             {% else %}
+               <li class="catalog__item"><a href="{{ category.href }}">{{ category.name }}</a></li>
+            {% endif %}
+            {% endfor %}
+           </div>
+          </ul>
+         </div>
+        </div>
+      <!--END CATALOG MENU -->
+        {% if informations %}
+           {% for information in informations %}
+            <li><a href="{{ information.href }}">{{ information.title }}</a></li>
+            {% endfor %}
+        {% endif %}
+      </ul>
+
+    </div>
+   </div>
+  </div>
+ </div>
+</nav>
+{% endif %}

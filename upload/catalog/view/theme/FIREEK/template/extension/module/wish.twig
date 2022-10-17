@@ -1,0 +1,29 @@
+<div id=wish class="dflex">
+ <div class="well border-right">
+  <h3><span class="ti-bookmark"></span> {{ heading_title }} <span class="wishCount"> {{ text_wishlist }} </span></h3>
+  <div class="wish_container">
+    <ul class="wish_dropdown">
+      {% if products %}
+      {% for product in products %}
+      <li class="wishlist-item">
+        <div class="text-center">{% if product.thumb %}<a href="{{ product.href }}"><img src="{{ product.thumb }}" alt="{{ product.name }}" title="{{ product.name }}" /></a>{% endif %}</div>
+        <div class="wishlist-item__products"><span class="text-left"><a href="{{ product.href }}">{{ product.name }}</a></span>
+        <span class="text-left">{{ product.model }}</span></div>
+          <div class="price">{% if product.price %} {% if not product.special %}
+            {{ product.price }}
+            {% else %} {{ product.special }} {% endif %} </div>
+          {% endif %}
+      </li>
+      {% endfor %}
+      </ul>
+    </div>
+    <div class="wish-link"><a href="{{ wishlist }}" title="{{ text_link }}"><span>{{ text_link }} >>></span></a></div>
+  {% else %}
+  <p style="text-align: center; padding-top: 30px;">{{ text_empty }}</p>
+    </ul>
+  </div>
+  <div class="wish-link" hidden="true"><a href="{{ wishlist }}" title="{{ text_link }}"><span>{{ text_link }} >>></span></a></div>
+  {% endif %}
+
+ </div>
+</div>

@@ -1,0 +1,726 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+  <name>Fireek</name>
+  <code>Fireek</code>
+  <version>1.0</version>
+  <author>AK</author>
+  <link></link>
+
+  
+<!-- *****Надпись Банеры с HTML во вкладке Дизайн ***** -->
+  <file path="admin/controller/common/column_left">
+    <operation>
+      <search><![CDATA[if ($this->user->hasPermission('access', 'design/seo_url')) {]]></search>
+      <add position="before"><![CDATA[			if ($this->user->hasPermission('access', 'design/banner')) {
+				$design[] = array(
+					'name'	   => $this->language->get('text_html_banner'),
+					'href'     => $this->url->link('extension/module/html_banner', 'user_token=' . $this->session->data['user_token'], true),
+					'children' => array()
+				);
+			}
+      ]]></add>
+    </operation>
+  </file>
+    <file path="admin/language/ru-ru/common/column_left">
+    <operation>
+      <search><![CDATA[$_['text_banner']]]></search>
+      <add position="after"><![CDATA[$_['text_html_banner']                      = 'Баннеры c HTML';]]></add>
+    </operation>
+  </file>
+      <file path="admin/language/en-gb/common/column_left">
+    <operation>
+      <search><![CDATA[$_['text_banner']]]></search>
+      <add position="after"><![CDATA[$_['text_html_banner']                      = 'HTML Banners';]]></add>
+    </operation>
+  </file> 
+  <!-- END Надпись Банеры с HTML во вкладке Дизайн -->
+  
+  <file path="catalog/language/ru-ru/account/wishlist.php">
+    <operation>
+      <search><![CDATA[$_['text_wishlist'] ]]></search>
+      <add position="before"><![CDATA[$_['text_link']     = 'Перейти в избранное';]]></add>
+    </operation>
+    <operation>
+      <search><![CDATA[$_['text_wishlist'] = 'Закладки (%s)';]]></search>
+      <add position="replace"><![CDATA[$_['text_wishlist']      = '%s';]]></add>
+    </operation>
+    <operation>
+      <search><![CDATA[$_['heading_title'] = 'Мои закладки';]]></search>
+      <add position="replace"><![CDATA[$_['heading_title'] = 'Избранное';]]></add>
+    </operation>
+  </file>
+
+  <file path="catalog/language/en-gb/account/wishlist.php">
+    <operation>
+      <search><![CDATA[$_['text_wishlist'] ]]></search>
+      <add position="before"><![CDATA[$_['text_link']     = 'In to Wishlist';]]></add>
+    </operation>
+    <operation>
+      <search><![CDATA[$_['text_wishlist'] = 'Wish List (%s)';]]></search>
+      <add position="replace"><![CDATA[$_['text_wishlist']      = '%s';]]></add>
+    </operation>
+  </file>
+
+  <file path="catalog/language/ru-ru/common/header.php">
+    <operation>
+      <search><![CDATA[$_['text_search'] ]]></search>
+      <add position="after"><![CDATA[
+$_['heading_title']                = 'Избранное';
+$_['text_register_account']        = 'Создание учётной записи поможет делать покупки быстрее и удобнее. Вы также сможете отслеживать статус своего заказа, пользоваться закладками, видеть свои предыдущие заказы или получить скидку как наш постоянный покупатель.';
+$_['text_forgotten']               = 'Забыли пароль?';
+$_['text_open']                    = 'Режим работы:';
+$_['entry_email']                  = 'E-Mail адрес';
+$_['entry_password']               = 'Пароль';
+        ]]>
+      </add>
+    </operation>
+    <operation>
+      <search><![CDATA[$_['text_wishlist']      = 'Закладки (%s)';]]></search>
+      <add position="replace"><![CDATA[$_['text_wishlist']      = '%s';]]></add>
+    </operation>
+  </file>
+
+  <file path="catalog/language/en-gb/common/header.php">
+    <operation>
+      <search><![CDATA[$_['text_all'] ]]></search>
+      <add position="after"><![CDATA[
+$_['heading_title']                = 'My Wishlist';
+$_['text_register_account']        = 'By creating an account you will be able to shop faster, be up to date on an order\'s status, and keep track of the orders you have previously made.';
+$_['text_forgotten']               = 'Forgotten Password';
+$_['text_open']                    = 'Opening Times';
+$_['entry_email']                  = 'E-Mail Address';
+$_['entry_password']               = 'Password';
+        ]]>
+      </add>
+    </operation>
+    <operation>
+      <search><![CDATA[$_['text_wishlist']      = 'Wish List (%s)';]]></search>
+      <add position="replace"><![CDATA[$_['text_wishlist']      = '%s';]]></add>
+    </operation>
+  </file>
+
+  <file path="catalog/controller/common/header.php">
+    <operation>
+      <search><![CDATA[$data['telephone'] = $this->config->get('config_telephone');]]></search>
+      <add position="after"><![CDATA[
+        $data['action'] = $this->url->link('account/login', '', true);
+        $data['forgotten'] = $this->url->link('account/forgotten', '', true);
+        ]]>
+      </add>
+    </operation>
+    <operation>
+      <search><![CDATA[$this->load->model('account/wishlist');]]></search>
+      <add position="after"><![CDATA[$data['wish'] = $this->load->controller('extension/module/wish');]]></add>
+    </operation>
+    <operation>
+      <search><![CDATA[$data['menu']]]></search>
+      <add position="after"><![CDATA[
+$data['open'] = nl2br($this->config->get('config_open'));
+$data['owner'] = nl2br($this->config->get('config_owner'));]]></add>
+    </operation>
+  </file>
+  <file path="catalog/controller/common/menu.php">
+    <operation>
+      <search><![CDATA[foreach ($children as $child) { ]]></search>
+      <add position="after"><![CDATA[					//Level 3
+      					$sub_children_data = array();
+
+      					$sub_children = $this->model_catalog_category->getCategories($child['category_id']);
+
+      					if (count($sub_children) > 0) {
+      							foreach ($sub_children as $sub_child) {
+      									$sub_filter_data = array(
+      											'filter_category_id' => $sub_child['category_id'],
+      											'filter_sub_category' => true
+      									);
+
+      									$sub_children_data[] = array(
+      											'name' => $sub_child['name'] . ($this->config->get('config_product_count') ? ' (' . $this->model_catalog_product->getTotalProducts($sub_filter_data) . ')' : ''),
+      											'href' => $this->url->link('product/category', 'path=' . $category['category_id'] . '_' . $child['category_id'] . '_' . $sub_child['category_id']),
+      											'image' => $this->model_tool_image->resize($sub_child['image'], $this->config->get('config_image_category_width'), $this->config->get('config_image_category_height'))
+      									);
+      							}
+      					} ]]></add>
+    </operation>
+    <operation>
+      <search><![CDATA['name'  => $child['name'] . ($this->config->get('config_product_count') ? ' (' . $this->model_catalog_product->getTotalProducts($filter_data) . ')' : ''), ]]></search>
+      <add position="after"><![CDATA[						'sub_children' => $sub_children_data,]]></add>
+    </operation>
+  </file>
+  <file path="catalog/language/en-gb/common/menu.php">
+    <operation>
+      <search><![CDATA[ $_['text_all'] ]]></search>
+      <add position="after"><![CDATA[$_['text_catalog']       = 'Catalog';	]]></add>
+    </operation>
+  </file>
+  <file path="catalog/language/ru-ru/common/menu.php">
+    <operation>
+      <search><![CDATA[ $_['text_all'] ]]></search>
+      <add position="after"><![CDATA[$_['text_catalog']       = 'Каталог';]]></add>
+    </operation>
+  </file>
+
+  <file path="catalog/controller/common/cart.php">
+    <operation>
+      <search><![CDATA[$data['text_items'] = sprintf($this->language->get('text_items'), $this->cart->countProducts() + (isset($this->session->data['vouchers']) ? count($this->session->data['vouchers']) : 0), $this->currency->format($total, $this->session->data['currency']));]]></search>
+        <add position="after"><![CDATA[$data['text_final_currency'] = $this->currency->format($total, $this->session->data['currency']);]]></add>
+    </operation>
+    <operation>
+  	  <search><![CDATA[$data['text_items'] = sprintf($this->language->get('text_items'), $this->cart->countProducts() + (isset($this->session->data['vouchers']) ? count($this->session->data['vouchers']) : 0), $this->currency->format($total, $this->session->data['currency']));]]></search>
+        <add position="replace"><![CDATA[$data['text_items'] = $this->cart->countProducts() + (isset($this->session->data['vouchers']) ? count($this->session->data['vouchers']) : 0);]]></add>
+    </operation>
+  </file>
+
+  <file path="catalog/controller/checkout/cart.php">
+  <operation>
+    <search><![CDATA[$json['total'] = sprintf($this->language->get('text_items'), $this->cart->countProducts() + (isset($this->session->data['vouchers']) ? count($this->session->data['vouchers']) : 0), $this->currency->format($total, $this->session->data['currency']));]]></search>
+    <add position="after">
+          <![CDATA[$json['total_s'] = $this->currency->format($total, $this->session->data['currency']);]]>
+    </add>
+  </operation>
+  <operation>
+		<search><![CDATA[$json['total'] = sprintf($this->language->get('text_items'), $this->cart->countProducts() + (isset($this->session->data['vouchers']) ? count($this->session->data['vouchers']) : 0), $this->currency->format($total, $this->session->data['currency']));]]></search>
+		<add position="replace">
+				<![CDATA[$json['total'] = $this->cart->countProducts() + (isset($this->session->data['vouchers']) ? count($this->session->data['vouchers']) : 0);]]>
+		</add>
+	</operation>
+	<operation>
+		<search><![CDATA[$json['success'] = sprintf($this->language->get('text_success'), $this->url->link('product/product', 'product_id=' . $this->request->post['product_id']), $product_info['name'], $this->url->link('checkout/cart'));]]></search>
+		<add position="replace">
+				<![CDATA[$json['success'] = sprintf($this->language->get('text_success'));]]>
+		</add>
+	</operation>
+  </file>
+  <file path="catalog/language/en-gb/checkout/cart.php">
+  	<operation>
+  		<search><![CDATA[$_['text_success']             = 'Success: You have added <a href="%s">%s</a> to your <a href="%s">shopping cart</a>!';]]>
+      </search>
+  		<add position="replace">
+  				<![CDATA[$_['text_success']             = 'The Goods are added to Your Cart</a>!';]]>
+  		</add>
+  	</operation>
+  </file>
+  <file path="catalog/language/ru-ru/checkout/cart.php">
+  	<operation>
+  		<search><![CDATA[$_['text_success']    							= 'Товар <a href="%s">%s</a> добавлен в <a href="%s">корзину покупок</a>!';]]></search>
+  		<add position="replace">
+  				<![CDATA[$_['text_success']                  = 'Товар добавлен в вашу корзину</a>!';]]>
+  		</add>
+  	</operation>
+  </file>
+  <file path="catalog/language/ru-ru/product/product.php">
+    <operation>
+      <search><![CDATA[$_['text_model']               = 'Код Товара:';]]></search>
+      <add position="replace"><![CDATA[$_['text_model']               = 'Артикул:';]]></add>
+    </operation>
+      <operation>
+        <search><![CDATA[$_['text_instock']]]></search>
+        <add position="after"><![CDATA[$_['text_stock_min']             = 'мало';
+        $_['text_stock_mid']             = 'достаточно';
+        $_['text_stock_max']             = 'много';
+]]></add>
+      </operation>
+      <operation>
+        <search><![CDATA[$_['text_reviews']  ]]></search>
+        <add position="after"><![CDATA[$_['text_only_reviews']          = 'отзывов';]]></add>
+      </operation>
+  </file>
+  <file path="catalog/language/en-gb/product/product.php">
+      <operation>
+        <search><![CDATA[$_['text_instock']]]></search>
+        <add position="after"><![CDATA[$_['text_stock_min']             = 'few';
+        $_['text_stock_mid']             = 'average';
+        $_['text_stock_max']             = 'a lot';
+]]></add>
+      </operation>
+      <operation>
+        <search><![CDATA[$_['text_reviews']  ]]></search>
+        <add position="after"><![CDATA[$_['text_only_reviews']          = 'reviews';]]></add>
+      </operation>
+  </file>
+  <file path="catalog/controller/product/compare.php">
+    <operation>
+      <search><![CDATA[$data['text_compare']]]></search>
+      <add position="after"><![CDATA[			$data['count_compare'] = isset($this->session->data['compare']) ? count($this->session->data['compare']) : 0;
+        ]]></add>
+    </operation>
+  </file>
+  <file path="catalog/controller/product/category.php">
+    <operation>
+      <search><![CDATA[$json['total'] = sprintf($this->language->get('text_compare'), (isset($this->session->data['compare']) ? count($this->session->data['compare']) : 0));]]></search>
+      <add position="replace"><![CDATA[			$json['total'] = isset($this->session->data['compare']) ? count($this->session->data['compare']) : 0;
+        ]]></add>
+    </operation>
+  </file>
+  <file path="catalog/controller/product/product.php">
+    <operation>
+      <search><![CDATA[$this->load->model('tool/image');]]></search>
+      <add position="before"><![CDATA[$data['stock_qty'] = $product_info['quantity'];
+
+        ]]></add>
+    </operation>
+    <operation>
+      <search><![CDATA[$data['reviews'] = sprintf($this->language->get('text_reviews'), (int)$product_info['reviews']);]]></search>
+      <add position="before"><![CDATA[			$data['reviews_qty'] = (int)$product_info['reviews'];
+      			$data['reviews_txt'] = $this->language->get('text_only_reviews');
+  ]]></add>
+    </operation>
+  </file>
+  <!-- slick slider -->
+  <file path="catalog/controller/product/product.php">
+    <operation>
+      <search><![CDATA[$data['images'] = array();]]></search>
+      <add position="before">
+            <![CDATA[
+                    if ($product_info['image']) {
+              				$data['additional'] = $this->model_tool_image->resize($product_info['image'], $this->config->get('theme_' . $this->config->get('config_theme') . '_image_additional_width'), $this->config->get('theme_' . $this->config->get('config_theme') . '_image_additional_height'));
+              				$this->document->setOgImage($data['additional']);
+            			  } else {
+            				  $data['additional'] = '';
+            			  }]]>
+      </add>
+    </operation>
+    <operation>
+      <search><![CDATA['thumb' => $this->model_tool_image->resize($result['image'], $this->config->get('theme_' . $this->config->get('config_theme') . '_image_additional_width'), $this->config->get('theme_' . $this->config->get('config_theme') . '_image_additional_height'))]]></search>
+      <add position="replace"><![CDATA[
+            'thumb' => $this->model_tool_image->resize($result['image'], $this->config->get('theme_' . $this->config->get('config_theme') . '_image_thumb_width'), $this->config->get('theme_' . $this->config->get('config_theme') . '_image_thumb_height')),
+    				'additional' => $this->model_tool_image->resize($result['image'], $this->config->get('theme_' . $this->config->get('config_theme') . '_image_additional_width'), $this->config->get('theme_' . $this->config->get('config_theme') . '_image_additional_height'))
+            ]]>
+      </add>
+    </operation>
+  </file>
+  <!-- articles in nav menu -->
+  <!-- need to add a query to the database ("ALTER TABLE `".DB_PREFIX."information` ADD COLUMN `top` INT(1) NOT NULL DEFAULT '0' AFTER `bottom` ") -->
+  <file path="catalog/controller/common/menu.php">
+    <operation>
+      <search><![CDATA[return $this->load->view('common/menu', $data);]]></search>
+      <add position="before"><![CDATA[$this->load->model('catalog/information');
+      $data['informations'] = array();
+      foreach ($this->model_catalog_information->getInformations() as $result) {
+        if ($result['nav']) {
+          $data['informations'][] = array(
+            'title' => $result['title'],
+            'href'  => $this->url->link('information/information', 'information_id=' . $result['information_id']) );
+        }
+      }
+        ]]>
+      </add>
+    </operation>
+  </file>
+  <file path="catalog/controller/common/header.php">
+    <operation>
+      <search><![CDATA[$data['og_image'] = $this->document->getOgImage();]]></search>
+      <add position="after"><![CDATA[
+     $this->load->model('catalog/information');
+      $data['informations'] = array();
+      foreach ($this->model_catalog_information->getInformations() as $result) {
+        if ($result['top']) {
+          $data['informations'][] = array(
+            'title' => $result['title'],
+            'href'  => $this->url->link('information/information', 'information_id=' . $result['information_id']) );
+        }
+      }
+        ]]>
+      </add>
+    </operation>
+  </file>
+  <file path="admin/controller/catalog/information.php">
+    <operation>
+      <search><![CDATA[if (isset($this->request->post['status']))]]></search>
+      <add position="before"><![CDATA[if (isset($this->request->post['nav'])) {
+  $data['nav'] = $this->request->post['nav'];
+} elseif (!empty($information_info)) {
+  $data['nav'] = $information_info['nav'];
+} else {
+  $data['nav'] = 0;
+} ]]>
+      </add>
+    </operation>
+    <operation>
+      <search><![CDATA[if (isset($this->request->post['status']))]]></search>
+      <add position="before"><![CDATA[if (isset($this->request->post['top'])) {
+  $data['top'] = $this->request->post['top'];
+} elseif (!empty($information_info)) {
+  $data['top'] = $information_info['top'];
+} else {
+  $data['top'] = 0;
+} ]]>
+      </add>
+    </operation>
+  </file>
+  <file path="admin/language/en-gb/catalog/information.php">
+      <operation>
+          <search><![CDATA[$_['entry_bottom']]]></search>
+          <add position="before"><![CDATA[$_['entry_nav']              = 'Nav Menu';  ]]></add>
+      </operation>
+      <operation>
+          <search><![CDATA[$_['entry_bottom']]]></search>
+          <add position="before"><![CDATA[$_['entry_top']              = 'Top Menu';  ]]></add>
+      </operation>
+      <operation>
+          <search><![CDATA[$_['help_bottom']]]></search>
+          <add position="before"><![CDATA[$_['help_nav']               = 'Display in Navigation menu'; ]]></add>
+      </operation>
+      <operation>
+          <search><![CDATA[$_['help_bottom']]]></search>
+          <add position="before"><![CDATA[$_['help_top']               = 'Display in Top Header menu'; ]]></add>
+      </operation>
+  </file>
+  <file path="admin/language/ru-ru/catalog/information.php">
+      <operation>
+          <search><![CDATA[$_['entry_bottom']]]></search>
+          <add position="before"><![CDATA[$_['entry_nav']              = 'Показать в меню'; ]]></add>
+      </operation>
+      <operation>
+          <search><![CDATA[$_['entry_bottom']]]></search>
+          <add position="before"><![CDATA[$_['entry_top']              = 'Показать сверху'; ]]></add>
+      </operation>
+      <operation>
+          <search><![CDATA[$_['help_bottom'] ]]></search>
+          <add position="before"><![CDATA[$_['help_nav']               = 'Показывать в меню навигации'; ]]></add>
+      </operation>
+      <operation>
+          <search><![CDATA[$_['help_bottom'] ]]></search>
+          <add position="before"><![CDATA[$_['help_top']               = 'Показывать в верхней шапке'; ]]></add>
+      </operation>
+  </file>
+  <file path="admin/model/catalog/information.php">
+      <operation>
+          <search><![CDATA[$this->db->query("INSERT INTO " . DB_PREFIX . "information SET sort_order = '" . (int)$data['sort_order'] . "', bottom = '" . (isset($data['bottom']) ? (int)$data['bottom'] : 0) . "', status = '" . (int)$data['status'] . "', noindex = '" . (int)$data['noindex'] . "'"); ]]></search>
+          <add position="replace"><![CDATA[$this->db->query("INSERT INTO " . DB_PREFIX . "information SET sort_order = '" . (int)$data['sort_order'] . "', bottom = '" . (isset($data['bottom']) ? (int)$data['bottom'] : 0) . "', top = '" . (isset($data['top']) ? (int)$data['top'] : 0) . "', nav = '" . (isset($data['nav']) ? (int)$data['nav'] : 0) . "', status = '" . (int)$data['status'] . "', noindex = '" . (int)$data['noindex'] . "'");]]></add>
+      </operation>
+      <operation>
+          <search><![CDATA[$this->db->query("UPDATE " . DB_PREFIX . "information SET sort_order = '" . (int)$data['sort_order'] . "', bottom = '" . (isset($data['bottom']) ? (int)$data['bottom'] : 0) . "', status = '" . (int)$data['status'] . "', noindex = '" . (int)$data['noindex'] . "' WHERE information_id = '" . (int)$information_id . "'");]]></search>
+          <add position="replace"><![CDATA[$this->db->query("UPDATE " . DB_PREFIX . "information SET sort_order = '" . (int)$data['sort_order'] . "', bottom = '" . (isset($data['bottom']) ? (int)$data['bottom'] : 0) . "', top = '" . (isset($data['top']) ? (int)$data['top'] : 0) . "', nav = '" . (isset($data['nav']) ? (int)$data['nav'] : 0) . "', status = '" . (int)$data['status'] . "', noindex = '" . (int)$data['noindex'] . "' WHERE information_id = '" . (int)$information_id . "'");]]></add>
+      </operation>
+  </file>
+  <file path="admin/view/template/catalog/information_form.twig">
+      <operation>
+          <search><![CDATA[<label class="col-sm-2 control-label" for="input-bottom">]]></search>
+          <add position="before"><![CDATA[
+              <label class="col-sm-2 control-label" for="input-nav"><span data-toggle="tooltip" title="{{ help_nav }}">{{ entry_nav }}</span></label>
+              <div class="col-sm-10">
+                <div class="checkbox">
+                  <label>{% if nav %}
+                    <input type="checkbox" name="nav" value="1" checked="checked" id="input-nav" />
+                    {% else %}
+                    <input type="checkbox" name="nav" value="1" id="input-nav" />
+                    {% endif %}
+                    &nbsp;</label>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+            ]]></add>
+      </operation>
+      <operation>
+          <search><![CDATA[<label class="col-sm-2 control-label" for="input-bottom">]]></search>
+          <add position="before"><![CDATA[
+              <label class="col-sm-2 control-label" for="input-top"><span data-toggle="tooltip" title="{{ help_top }}">{{ entry_top }}</span></label>
+              <div class="col-sm-10">
+                <div class="checkbox">
+                  <label>{% if top %}
+                    <input type="checkbox" name="top" value="1" checked="checked" id="input-top" />
+                    {% else %}
+                    <input type="checkbox" name="top" value="1" id="input-top" />
+                    {% endif %}
+                    &nbsp;</label>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+            ]]></add>
+      </operation>
+  </file>
+
+<!-- Full Screen content-->
+<file path="catalog/controller/*/*.php">
+    <operation>
+        <search><![CDATA[ $data['column_left'] = $this->load->controller('common/column_left'); ]]></search>
+        <add position="after"><![CDATA[
+            $data['content_full'] = $this->load->controller('extension/module/content_full');
+            $data['content_full_bottom'] = $this->load->controller('extension/module/content_full_bottom');
+        ]]>            </add>
+    </operation>
+</file>
+<file path="catalog/view/theme/fireek/template/*/*.twig">
+    <operation>
+        <search><![CDATA[ {{ header }} ]]></search>
+        <add position="after"><![CDATA[ {{ content_full }} ]]></add>
+    </operation>
+    <operation>
+        <search><![CDATA[ {{ footer }} ]]></search>
+        <add position="before"><![CDATA[{{ content_full_bottom }}]]></add>
+    </operation>
+</file>
+
+<file path="admin/language/en-gb/design/layout.php">
+    <operation>
+        <search><![CDATA[ $_['text_column_right'] ]]></search>
+        <add position="before"><![CDATA[ $_['text_content_top_full_width']   = 'Content Top Full Width ';$_['text_content_bottom_full_width']   = 'Content Bottom Full Width ';  ]]></add>
+    </operation>
+</file>
+<file path="admin/language/ru-ru/design/layout.php">
+    <operation>
+        <search><![CDATA[ $_['text_column_right'] ]]></search>
+        <add position="before"><![CDATA[ $_['text_content_top_full_width']   = 'Верхний контент - во весь экран ';$_['text_content_bottom_full_width']   = 'Нижний контент - во всеь экран ';  ]]></add>
+    </operation>
+</file>
+<file path="admin/view/template/design/layout_form.twig">
+    <operation>
+        <search><![CDATA[
+        {% set module_row = 0 %}
+         ]]>            </search>
+        <add position="after"><![CDATA[
+
+        <div class="col-lg-12 col-md-12 col-sm-12">
+          <div class="row">
+          <table id="module-content-full" class="table table-striped table-bordered table-hover">
+            <thead>
+            <tr>
+            <td class="text-center">{{text_content_top_full_width}}</td>
+            </tr>
+            </thead>
+            <tbody>
+                            {% for layout_module in layout_modules %}
+                            {% if layout_module.position == 'content_full' %}
+                                <tr id="module-row{{ module_row }}">
+            <td class="text-left">
+            <div class="input-group">
+            <select name="layout_module[{{ module_row }}][code]" class="form-control input-sm">
+                                    {% for extension in extensions %}
+                                                <optgroup label="{{ extension.name }}">
+                                    {% if not extension.module %}
+                                    {% if extension.code == layout_module.code %}
+                                                    <option value="{{ extension.code }}" selected="selected">{{ extension.name }}</option>
+                                    {% else %}
+                                                    <option value="{{ extension.code }}">{{ extension.name }}</option>
+                                    {% endif %}
+                                    {% else %}
+                                    {% for module in extension.module %}
+                                    {% if module.code == layout_module.code %}
+                                                    <option value="{{ module.code }}" selected="selected">{{ module.name }}</option>
+                                    {% else %}
+                                                    <option value="{{ module.code }}">{{ module.name }}</option>
+                                    {% endif %}
+                                    {% endfor %}
+                                    {% endif %}
+                                                </optgroup>
+                                    {% endfor %}
+                                            </select>
+            <input type="hidden" name="layout_module[{{ module_row }}][position]" value="{{ layout_module.position }}" />
+            <input type="hidden" name="layout_module[{{ module_row }}][sort_order]" value="{{ layout_module.sort_order }}" />
+            <div class="input-group-btn">
+            <a href="{{ layout_module.edit }}" type="button" data-toggle="tooltip" title="{{ button_edit }}" target="_blank" class="btn btn-primary btn-sm">
+            <i class="fa fa-pencil"></i>
+            </a>
+            <button type="button" onclick="$('#module-row{{ module_row }}').remove();" data-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger btn-sm">
+            <i class="fa fa fa-minus-circle"></i>
+            </button>
+            </div>
+            </div>
+            </td>
+            </tr>
+                            {% set module_row = module_row + 1 %}
+                            {% endif %}
+                            {% endfor %}
+                            </tbody>
+            <tfoot>
+            <tr>
+            <td class="text-left">
+            <div class="input-group">
+            <select class="form-control input-sm">
+            <option value=""></option>
+                                    {% for extension in extensions %}
+                                                <optgroup label="{{ extension.name }}">
+                                    {% if not extension.module %}
+                                                    <option value="{{ extension.code }}">{{ extension.name }}</option>
+                                    {% else %}
+                                    {% for module in extension.module %}
+                                                    <option value="{{ module.code }}">{{ module.name }}</option>
+                                    {% endfor %}
+                                    {% endif %}
+                                                </optgroup>
+                                    {% endfor %}
+                                            </select>
+            <div class="input-group-btn">
+            <button type="button" onclick="addModule('content-full');" data-toggle="tooltip" title="{{ button_module_add }}" class="btn btn-primary btn-sm">
+            <i class="fa fa-plus-circle"></i>
+            </button>
+            </div>
+            </div>
+            </td>
+            </tr>
+            </tfoot>
+          </table>
+          </div>
+        </div>
+        ]]>
+        </add>
+    </operation>
+    <operation>
+        <search index="1"><![CDATA[ </fieldset> ]]></search>
+        <add position="before"><![CDATA[
+        <div class="col-lg-12 col-md-12 col-sm-12">
+          <div class="row">
+          <table id="module-bottom-full" class="table table-striped table-bordered table-hover">
+          <thead>
+          <tr>
+          <td class="text-center">{{text_content_bottom_full_width}}</td>
+          </tr>
+          </thead>
+          <tbody>
+                          {% for layout_module in layout_modules %}
+                          {% if layout_module.position == 'bottom_full' %}
+                              <tr id="module-row{{ module_row }}">
+          <td class="text-left">
+          <div class="input-group">
+          <select name="layout_module[{{ module_row }}][code]" class="form-control input-sm">
+                                  {% for extension in extensions %}
+                                              <optgroup label="{{ extension.name }}">
+                                  {% if not extension.module %}
+                                  {% if extension.code == layout_module.code %}
+                                                  <option value="{{ extension.code }}" selected="selected">{{ extension.name }}</option>
+                                  {% else %}
+                                                  <option value="{{ extension.code }}">{{ extension.name }}</option>
+                                  {% endif %}
+                                  {% else %}
+                                  {% for module in extension.module %}
+                                  {% if module.code == layout_module.code %}
+                                                  <option value="{{ module.code }}" selected="selected">{{ module.name }}</option>
+                                  {% else %}
+                                                  <option value="{{ module.code }}">{{ module.name }}</option>
+                                  {% endif %}
+                                  {% endfor %}
+                                  {% endif %}
+                                              </optgroup>
+                                  {% endfor %}
+                                          </select>
+          <input type="hidden" name="layout_module[{{ module_row }}][position]" value="{{ layout_module.position }}" />
+          <input type="hidden" name="layout_module[{{ module_row }}][sort_order]" value="{{ layout_module.sort_order }}" />
+          <div class="input-group-btn">
+          <a href="{{ layout_module.edit }}" type="button" data-toggle="tooltip" title="{{ button_edit }}" target="_blank" class="btn btn-primary btn-sm">
+          <i class="fa fa-pencil"></i>
+          </a>
+          <button type="button" onclick="$('#module-row{{ module_row }}').remove();" data-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger btn-sm">
+          <i class="fa fa fa-minus-circle"></i>
+          </button>
+          </div>
+          </div>
+          </td>
+          </tr>
+                          {% set module_row = module_row + 1 %}
+                          {% endif %}
+                          {% endfor %}
+                          </tbody>
+          <tfoot>
+          <tr>
+          <td class="text-left">
+          <div class="input-group">
+          <select class="form-control input-sm">
+          <option value=""></option>
+                                  {% for extension in extensions %}
+                                              <optgroup label="{{ extension.name }}">
+                                  {% if not extension.module %}
+                                                  <option value="{{ extension.code }}">{{ extension.name }}</option>
+                                  {% else %}
+                                  {% for module in extension.module %}
+                                                  <option value="{{ module.code }}">{{ module.name }}</option>
+                                  {% endfor %}
+                                  {% endif %}
+                                              </optgroup>
+                                  {% endfor %}
+                                          </select>
+          <div class="input-group-btn">
+          <button type="button" onclick="addModule('bottom-full');" data-toggle="tooltip" title="{{ button_module_add }}" class="btn btn-primary btn-sm">
+          <i class="fa fa-plus-circle"></i>
+          </button>
+          </div>
+          </div>
+          </td>
+          </tr>
+          </tfoot>
+        </table>
+        </div>
+      </div>
+      ]]>
+        </add>
+    </operation>
+    <operation>
+        <search><![CDATA[ $('#module-column-left, #module-column-right, #module-content-top, #module-content-bottom').delegate('select[name*=\'code\']', 'change', function() {
+var part = this.value.split('.'); ]]></search>
+        <add position="replace"><![CDATA[
+        $('#module-content-full, #module-bottom-full, #module-column-left, #module-column-right, #module-content-top, #module-content-bottom').delegate('select[name*=\'code\']', 'change', function() {
+var part = this.value.split('.');
+         ]]>
+        </add>
+    </operation>
+    <operation>
+        <search><![CDATA[ $('#module-column-left, #module-column-right, #module-content-top, #module-content-bottom').trigger('change'); ]]></search>
+        <add position="replace"><![CDATA[ $('#module-content-full, #module-bottom-full, #module-column-left, #module-column-right, #module-content-top, #module-content-bottom').trigger('change');
+         ]]>
+        </add>
+    </operation>
+</file>
+<!-- SVG support by Ihor Chyshkala -->
+<file path="admin/controller/common/filemanager.php">
+  <operation error="log">
+    <search>
+      <![CDATA[jpg,jpeg,png,gif,JPG,JPEG,PNG,GIF]]>
+    </search>
+    <add position="replace">
+      <![CDATA[jpg,jpeg,png,gif,JPG,JPEG,PNG,GIF,svg,SVG]]]>
+    </add>
+  </operation>
+  <operation error="log">
+    <search>
+      <![CDATA['jpg',]]>
+    </search>
+    <add position="after">
+      <![CDATA[						'svg',]]>
+    </add>
+  </operation>
+      <operation error="log">
+    <search>
+      <![CDATA['image/jpeg',]]>
+    </search>
+    <add position="after">
+      <![CDATA[						'image/svg+xml',]]>
+    </add>
+  </operation>
+</file>
+<file path="admin/model/tool/image.php">
+  <operation error="log">
+    <search>
+      <![CDATA[$extension = pathinfo($filename, PATHINFO_EXTENSION);]]>
+    </search>
+    <add position="after">
+      <![CDATA[
+  if('svg' == $extension) {
+          if ($this->request->server['HTTPS']) {
+              return HTTPS_CATALOG . 'image/' . $filename;
+          } else {
+              return HTTP_CATALOG . 'image/' . $filename;
+          }
+    }]]>
+    </add>
+  </operation>
+</file>
+<file path="catalog/model/tool/image.php">
+  <operation error="log">
+    <search>
+      <![CDATA[$extension = pathinfo($filename, PATHINFO_EXTENSION);]]>
+    </search>
+    <add position="after">
+      <![CDATA[
+  if('svg' == $extension) {
+          if ($this->request->server['HTTPS']) {
+              return HTTPS_SERVER . 'image/' . $filename;
+          } else {
+              return HTTP_SERVER . 'image/' . $filename;
+          }
+    }]]>
+    </add>
+  </operation>
+</file>
+</modification>
